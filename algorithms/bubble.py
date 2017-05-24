@@ -9,7 +9,3 @@ def sort(array):
                 swapped = True
 
     return array
-
-if __name__ == '__main__':
-    r = range(100)
-    sort(r)

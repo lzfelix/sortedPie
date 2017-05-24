@@ -1,4 +1,4 @@
-from algorithms import bubble, bubble_improved
+from algorithms import bubble, bubble_improved, quick, select
 import random
 import unittest
 
@@ -9,8 +9,6 @@ class Test(unittest.TestCase):
         if mode not in ['r', 'a', 'd']:
             raise ValueError('Mode should be (r)andom, (a)scending or (d)escending.')
 
-        r = None
-        expected = None
         if mode == 'a':
             r = list(range(range_size))
             expected = r
@@ -43,6 +41,16 @@ class Test(unittest.TestCase):
 
     def test_bubble_sort_improved(self):
         self.run_all(bubble_improved.sort, 100)
+
+    def test_quicksort(self):
+        self.run_all(quick.sort, 100)
+
+    def test_median_quicksort(self):
+        median_quicksort = lambda x: quick.sort(x, True)
+        self.run_all(median_quicksort, 100)
+
+    def test_selectsort(self):
+        self.run_all(select.sort, 100)
 
 
 if __name__ == '__main__':
