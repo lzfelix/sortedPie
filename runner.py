@@ -1,11 +1,11 @@
-import bubble, bubble_improved, heap, insertion, merge, quick, select
+from algorithms import bubble, bubble_improved, heap, insertion, merge, quick, select, quick_iterative
 import argparse
 import random
 import timeit
 import os
 
 
-def generate_array(range_size, mode, seed=42):
+def generate_array(range_size, mode, seed=None):
     if mode not in ['r', 'a', 'd']:
         raise ValueError('Mode should be (r)andom, (a)scending or (d)escending.')
 
@@ -32,10 +32,16 @@ def get_algorithm_by_name(algorithm_name):
         algorithm = insertion.sort
     elif algorithm_name == 'merge':
         algorithm = merge.sort
-    elif algorithm_name == 'quick_left':
-        algorithm = lambda x: quick.sort(x, False)
+    elif algorithm_name == 'quick':
+        algorithm = lambda array: quick.sort(array, False)
     elif algorithm_name == 'quick_median':
-        algorithm = lambda x: quick.sort(x, True)
+        algorithm = lambda array: quick.sort(array, True)
+    elif algorithm_name == 'select':
+        algorithm = select.sort
+    elif algorithm_name == 'iquick':
+        algorithm = lambda array: quick_iterative.sort(array, False)
+    elif algorithm_name == 'iquick_median':
+        algorithm = lambda array: quick_iterative.sort(array, True)
     elif algorithm_name == 'select':
         algorithm = select.sort
     else:
@@ -45,10 +51,14 @@ def get_algorithm_by_name(algorithm_name):
 
 
 def generate_filename(algorithm, mode, n):
-    if not os.path.isdir('reports'):
-        os.mkdir('reports'.format(os.sep))
+    current_dir = os.getcwd()
+    reports_folder = os.path.join(current_dir, 'reports')
 
-    return 'reports{}{}_{}_{}.csv'.format(os.sep, algorithm, mode, n)
+    if not os.path.isdir(reports_folder):
+        os.mkdir(reports_folder)
+
+    filename = '{}_{}_{}.csv'.format(algorithm, mode, n)
+    return os.path.join(reports_folder, filename)
 
 
 def store_data_on_file(filename, execution_times):
@@ -60,37 +70,40 @@ def store_data_on_file(filename, execution_times):
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser("Utility to benchmark sorting algorithms using Python's standard data structures")
+    parser = argparse.ArgumentParser("Utility to benchmark sorting algorithms using Python's standard data structures",
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('-a', help='The sorting algorithm to be used: bubble, bubble_improved, heap, insertion, ' +
-                        'merge, quick_left, quick_median, select.', required=True, dest='algorithm')
-    parser.add_argument('-m', help='How the generated numbers will be distributed: (a)scending, (d)escending,' +
-                                   '(r)andom. Default is r.', default='r', type=str)
-    parser.add_argument('-n', help='Amount of numbers to be generated for sorting. Default is 100.',
-                        default=100, type=int)
-    parser.add_argument('-t', help='Number of times that the benchmark will be repeated. Default is 10.',
-                        default=10, type=int, dest='times')
+                        'merge, quick, quick_median, select, iquick, iquick_median.', required=True, dest='algorithm',
+                        default=argparse.SUPPRESS)
+    parser.add_argument('--mode', help='How the generated numbers will be distributed: (a)scending, (d)escending,' +
+                                   '(r)andom.', default='r', type=str)
+    parser.add_argument('--size', help='Amount of numbers to be generated for sorting.', default=100, type=int)
+    parser.add_argument('--times', help='Number of times that the benchmark will be repeated.', default=10, type=int,
+                        dest='times')
     parser.add_argument('-f', help='If this flag is specified, this program will save the benchmark results on a .csv'
                         'file named [algorithm]_[mode]_[n].txt inside the reports/ folder. If such folder doesn\'t'
-                        ' exist, it will be created.', action='store_true', dest='save_file')
+                        ' exist, it will be created in the same directory where this script was invoked. The .csv '
+                        'format is time_run1,time_run2,...time_runN,average,standard_deviation.', action='store_true',
+                        dest='save_file')
 
     # extracting data from parser
     args = parser.parse_args()
 
     times = args.times
-    mode = args.m.lower()
+    mode = args.mode.lower()
     algorithm_name = args.algorithm.lower()
-    n = args.n
+    n = args.size
 
-    # creating data to process
+    # picking the algorithm
     algorithm = get_algorithm_by_name(algorithm_name)
-    array = generate_array(n, mode)
 
     # running the benchmark
     execution_times = list()
     for i in range(times):
         print('Run {}/{}'.format(i+1, times), end='')
-        execution_time = timeit.repeat(lambda: algorithm(array), number=1, repeat=1)
+        array = generate_array(n, mode)
+        execution_time = timeit.repeat(lambda: ss(array), number=1, repeat=1)
         print(' - {}'.format(execution_time[0]))
 
         execution_times.extend(execution_time)
@@ -98,10 +111,18 @@ if __name__ == '__main__':
     # calculating avg and standard deviation
     avg = sum(execution_times) / len(execution_times)
 
+    
     sigma = 0
     for x in execution_times:
         sigma += (x-avg)**2
-    sigma = (sigma / n) ** (1/2)
+    sigma = (sigma / (n - 1)) ** (1/2)
+
+    avg = sum(execution_times) / len(execution_times)
+
+    sigma = 0
+    for x in execution_times:
+        sigma += (x - avg) ** 2
+    sigma = (sigma / n) ** (1 / 2)
 
     print('Average: {}'.format(avg))
     print('std dev: {}'.format(sigma))
