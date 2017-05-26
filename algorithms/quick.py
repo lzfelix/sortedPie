@@ -32,7 +32,7 @@ def sort(array, pivot_central=False):
             if i < j:
                 array[i], array[j] = array[j], array[i]
 
-                # this makes the up/down lookup resume from where it left.
+                # this makes the up/down lookup resume from where it has left.
                 down_begin = i
                 up_begin = j
 
@@ -42,6 +42,3 @@ def sort(array, pivot_central=False):
 
     quicksort(0, len(array))
     return array
-
-
-print(sort([1, 3, 100, -20, 2, 12, -999, 3, 100, 444, 32, 98, 102], False))

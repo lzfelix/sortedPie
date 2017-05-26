@@ -1,4 +1,4 @@
-from algorithms import bubble, bubble_improved, quick, select
+from algorithms import bubble, bubble_improved, quick, select, insertion, heap, merge
 import random
 import unittest
 
@@ -11,7 +11,7 @@ class Test(unittest.TestCase):
 
         if mode == 'a':
             r = list(range(range_size))
-            expected = r
+            expected = r[:]
         elif mode == 'd':
             r = list(range(range_size, -1, -1))
             expected = sorted(r)
@@ -51,6 +51,15 @@ class Test(unittest.TestCase):
 
     def test_selectsort(self):
         self.run_all(select.sort, 100)
+
+    def test_selectsort(self):
+        self.run_all(insertion.sort, 100)
+
+    def test_heapsort(self):
+        self.run_all(heap.sort, 100)
+
+    def test_mergesort(self):
+        self.run_all(merge.sort, 100)
 
 
 if __name__ == '__main__':
