@@ -1,4 +1,4 @@
-from algorithms import bubble, bubble_improved, heap, insertion, merge, quick, select, quick_iterative
+from algorithms import bubble, bubble_improved, heap, insertion, merge, quick, selection, quick_iterative
 import argparse
 import random
 import timeit
@@ -36,14 +36,12 @@ def get_algorithm_by_name(algorithm_name):
         algorithm = lambda array: quick.sort(array, False)
     elif algorithm_name == 'quick_median':
         algorithm = lambda array: quick.sort(array, True)
-    elif algorithm_name == 'select':
-        algorithm = select.sort
+    elif algorithm_name == 'selection':
+        algorithm = selection.sort
     elif algorithm_name == 'iquick':
         algorithm = lambda array: quick_iterative.sort(array, False)
     elif algorithm_name == 'iquick_median':
         algorithm = lambda array: quick_iterative.sort(array, True)
-    elif algorithm_name == 'select':
-        algorithm = select.sort
     else:
         raise ValueError('Invalid algorithm name')
 
@@ -74,8 +72,8 @@ if __name__ == '__main__':
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('-a', help='The sorting algorithm to be used: bubble, bubble_improved, heap, insertion, ' +
-                        'merge, quick, quick_median, select, iquick, iquick_median.', required=True, dest='algorithm',
-                        default=argparse.SUPPRESS)
+                        'merge, quick, quick_median, selection, iquick, iquick_median.', required=True,
+                        dest='algorithm', default=argparse.SUPPRESS)
     parser.add_argument('--mode', help='How the generated numbers will be distributed: (a)scending, (d)escending,' +
                                    '(r)andom.', default='r', type=str)
     parser.add_argument('--size', help='Amount of numbers to be generated for sorting.', default=100, type=int)
@@ -103,14 +101,13 @@ if __name__ == '__main__':
     for i in range(times):
         print('Run {}/{}'.format(i+1, times), end='')
         array = generate_array(n, mode)
-        execution_time = timeit.repeat(lambda: ss(array), number=1, repeat=1)
+        execution_time = timeit.repeat(lambda: algorithm(array), number=1, repeat=1)
         print(' - {}'.format(execution_time[0]))
 
         execution_times.extend(execution_time)
 
     # calculating avg and standard deviation
     avg = sum(execution_times) / len(execution_times)
-
 
     sigma = 0
     for x in execution_times:

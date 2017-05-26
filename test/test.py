@@ -1,4 +1,4 @@
-from algorithms import bubble, bubble_improved, quick, select, insertion, heap, merge, quick_iterative
+from algorithms import bubble, bubble_improved, quick, selection, insertion, heap, merge, quick_iterative
 import random
 import unittest
 
@@ -80,7 +80,7 @@ class Test(unittest.TestCase):
         self.run_all(median_quicksort, Test.ARRAY_SIZE)
 
     def test_selectsort(self):
-        self.run_all(select.sort, Test.ARRAY_SIZE)
+        self.run_all(selection.sort, Test.ARRAY_SIZE)
 
     def test_insertionsort(self):
         self.run_all(insertion.sort, Test.ARRAY_SIZE)
