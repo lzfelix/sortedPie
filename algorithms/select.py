@@ -1,7 +1,9 @@
 def sort(array):
 
-    for j in range(len(array)):
-        x = array.index(min(array[j:]))
-        array[x], array[j] = array[j], array[x]
+    for i in range(len(array)):
+        search_array = array[i:]
+
+        x = search_array.index(min(search_array))
+        array[x+i], array[i] = array[i], array[x+i]
 
     return array

@@ -111,7 +111,7 @@ if __name__ == '__main__':
     # calculating avg and standard deviation
     avg = sum(execution_times) / len(execution_times)
 
-    
+
     sigma = 0
     for x in execution_times:
         sigma += (x-avg)**2
