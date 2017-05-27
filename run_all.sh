@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-batches=(500 1000 5000 10000 15000 20000 25000 30000)
+batches=(1250 2500 5000 10000 15000 20000 25000 30000)
 algorithms=('bubble' 'bubble_improved' 'heap' 'insertion' 'merge' 'quick' 'quick_median' 'selection' 'iquick' 'iquick_median')
 modes=('r' 'a' 'd')
 
