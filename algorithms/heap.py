@@ -1,20 +1,23 @@
-def get_largest_child(parent, array):
-    """Given a parent node, returns its largest child. If None is found returns (-infinity, None)."""
+# creating a representation for infinity.
+inf = float("inf")
 
-    # creating a lazy infinity number
-    inf = float("inf")
+
+def get_largest_child(parent, array, array_size):
+    """Given a parent node, returns its largest child. If None is found returns (-infinity, None)."""
 
     left = parent * 2 + 1
     right = parent * 2 + 2
+    left_value = right_value = -inf
 
-    if left >= len(array):
+    if left >= array_size:
         left = None
+    else:
+        left_value = array[left]
 
-    if right >= len(array):
+    if right >= array_size:
         right = None
-
-    left_value = array[left] if left else -inf
-    right_value = array[right] if right else -inf
+    else:
+        right_value = array[right]
 
     if left_value > right_value:
         return left_value, left
@@ -27,7 +30,7 @@ def max_heapify(array):
     n = len(array)
 
     def recursive_max_heapify(parent):
-        largest_child, child_index = get_largest_child(parent, array)
+        largest_child, child_index = get_largest_child(parent, array, n)
 
         # just heapify this node if it has children
         if child_index and largest_child > array[parent]:
@@ -40,7 +43,7 @@ def max_heapify(array):
 
 def update_heap(parent, heap, heap_size):
     """Moves the top element on the heap to its proper position."""
-    largest, child_index = get_largest_child(parent, heap[:heap_size])
+    largest, child_index = get_largest_child(parent, heap, heap_size)
 
     if child_index and largest > heap[parent]:
         heap[parent], heap[child_index] = heap[child_index], heap[parent]
