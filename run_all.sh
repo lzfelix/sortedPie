@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 batches=(1000 5000 10000 15000 20000 25000 30000)
-algorithms=('bubble' 'bubble_improved' 'heap' 'insertion' 'merge' 'quick' 'quick_median' 'selection' 'iquick' 'iquick_median')
+algorithms=('bubble' 'bubble_improved' 'heap' 'insertion' 'merge' 'quick' 'quick_median' 'selection' 'iquick' 'iquick_median', 'shell')
 modes=('r' 'a' 'd')
 
 for batch in "${batches[@]}"

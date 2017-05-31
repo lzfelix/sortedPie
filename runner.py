@@ -48,7 +48,7 @@ def get_algorithm_by_name(algorithm_name):
     elif algorithm_name == 'shell':
         algorithm = shell.sort
     else:
-        raise ValueError('Invalid algorithm name')
+        raise ValueError('Invalid algorithm name') 
 
     return algorithm
 
