@@ -1,13 +1,13 @@
-def sort(array):
-    for i in range(len(array)):
+def sort(array, step_size=1):
+    for i in range(0, len(array), step_size):
         p = array[i]
 
         j = 0
-        for j in range(i-1, -1, -1):
+        for j in range(i - step_size, -1, -step_size):
             if array[j] > p:
-                array[j+1] = array[j]
+                array[j + step_size] = array[j]
             else:
-                j += 1  # emulating C's composite for condition (; j>=0 && array[j]>p
+                j += step_size  # emulating C's composite for condition (; j>=0 && array[j]>p
                 break
 
         array[j] = p

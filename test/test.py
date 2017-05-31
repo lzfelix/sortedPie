@@ -1,4 +1,4 @@
-from algorithms import bubble, bubble_improved, quick, selection, insertion, heap, merge, quick_iterative
+from algorithms import bubble, bubble_improved, quick, selection, insertion, heap, merge, quick_iterative, shell
 import random
 import unittest
 
@@ -46,7 +46,7 @@ class Test(unittest.TestCase):
             raise ValueError('Mode should be (r)andom, (a)scending or (d)escending.')
 
         expected = sorted(r)
-        self.assertEquals(expected, algorithm(r), assertion_message)
+        self.assertEqual(expected, algorithm(r), assertion_message)
 
     def ascending(self, algorithm, range_size):
         self.evaluate_algorithm(algorithm, range_size, mode='a')
@@ -97,6 +97,9 @@ class Test(unittest.TestCase):
     def test_iterative_median_quicksort(self):
         median_quicksort = lambda array: quick_iterative.sort(array, use_median=True)
         self.run_all(median_quicksort, Test.ARRAY_SIZE)
+
+    def test_shell(self):
+        self.run_all(shell.sort, Test.ARRAY_SIZE)
 
 if __name__ == '__main__':
     unittest.main()
