@@ -1,4 +1,4 @@
-from algorithms import bubble, bubble_improved, heap, insertion, merge, quick, selection, quick_iterative
+from algorithms import bubble, bubble_improved, heap, insertion, merge, quick, selection, quick_iterative, shell
 import argparse
 import random
 import timeit
@@ -45,6 +45,8 @@ def get_algorithm_by_name(algorithm_name):
         algorithm = lambda array: quick_iterative.sort(array, False)
     elif algorithm_name == 'iquick_median':
         algorithm = lambda array: quick_iterative.sort(array, True)
+    elif algorithm_name == 'shell':
+        algorithm = shell.sort
     else:
         raise ValueError('Invalid algorithm name')
 
