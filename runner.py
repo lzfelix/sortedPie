@@ -6,6 +6,9 @@ import os
 
 
 def generate_array(range_size, mode, seed=None):
+    """Generates a sorted [0..n-1], reversed-sorted [n-1..0] or shuffled array according to mode. Seed is only used
+    on the latter case."""
+
     if mode not in ['r', 'a', 'd']:
         raise ValueError('Mode should be (r)andom, (a)scending or (d)escending.')
 
@@ -13,7 +16,7 @@ def generate_array(range_size, mode, seed=None):
         return list(range(range_size))
 
     elif mode == 'd':
-        return list(range(range_size, -1, -1))
+        return list(range(range_size-1, -1, -1))
 
     else:
         random.seed(seed)

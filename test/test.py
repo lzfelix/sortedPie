@@ -27,7 +27,7 @@ class Test(unittest.TestCase):
             assertion_message = "Test failed with array sorted in ascending order."
 
         elif mode == 'd':
-            r = list(range(range_size, -1, -1))
+            r = list(range(range_size-1, -1, -1))
             assertion_message = "Test failed with array sorted in descending order."
 
         elif mode == 'c':

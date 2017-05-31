@@ -1,6 +1,7 @@
 **/__pycache__/
 **/.idea/
 **/reports/
+**/graphs/
 summary.csv
 reports.zip
 **.xlsx
