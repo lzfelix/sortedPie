@@ -5,7 +5,7 @@ import timeit
 import os
 
 
-def generate_array(range_size, mode, seed=None):
+def generate_array(range_size, mode, seed=42):
     """Generates a sorted [0..n-1], reversed-sorted [n-1..0] or shuffled array according to mode. Seed is only used
     on the latter case."""
 

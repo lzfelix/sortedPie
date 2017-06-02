@@ -65,8 +65,8 @@ def plot(name, stats):
 
     plt.plot(x, y_random, label='Embaralhado', color='#279427')
     if y_asc:
-        # plt.plot(x, y_asc, label='Crescente', linewidth=3)
-        plt.plot(x, y_asc, label='Crescente', color='#1C6CAA')
+        plt.plot(x, y_asc, label='Crescente', linewidth=3, color='#1C6CAA')
+        # plt.plot(x, y_asc, label='Crescente', color='#1C6CAA')
 
     if y_desc:
         plt.plot(x, y_desc, label='Decrescente', color='#FF7311')
