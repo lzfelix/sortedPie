@@ -1,16 +1,10 @@
-
 def sort(array):
-    for i in range(0, len(array)):
+    for i in range(len(array)):
         p = array[i]
-
-        j = 0
-        for j in range(i - 1, -1, -1):
-            if array[j] > p:
-                array[j + 1] = array[j]
-            else:
-                j += 1 # emulating C's composite for condition (; j>=0 && array[j]>p
-                break
-
+        j = i
+        while j >= 1 and array[j - 1] > p:
+            array[j] = array[j - 1]
+            j -= 1
         array[j] = p
 
     return array
