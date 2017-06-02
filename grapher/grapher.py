@@ -3,6 +3,7 @@ import os.path as osp
 
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+from matplotlib.ticker import MultipleLocator
 
 
 def generate_filename(algorithm_name):
@@ -20,15 +21,19 @@ def setup_mpl():
     """Setup of font and draw area sizes."""
     mpl.rcParams['font.size'] = 15
     mpl.rcParams['axes.labelsize'] = 15
-    mpl.rcParams['axes.labelpad'] = 11
+    mpl.rcParams['axes.labelpad'] = 10
 
-    plt.gcf().set_size_inches(7, 7)
+    plt.gcf().set_size_inches(7.2, 7.2)
 
 
 def post_plotting_design():
     """Adds legends, pads axes label, soften grid color."""
 
-    plt.legend(fancybox=True, title=r'$\bf{Array}$')
+    leg = plt.legend(fancybox=True, title=r'$\bf{Array}$')
+
+    # set the linewidth of each legend object
+    for legobj in leg.legendHandles:
+        legobj.set_linewidth(2.0)
 
     # Forcing matplotlib to start the axes at (0,0)
     plt.ylim(ymin=0)
@@ -36,7 +41,13 @@ def post_plotting_design():
 
     plt.xlabel('Tamanho da entrada')
     plt.ylabel('Tempo (s)')
+
+    # Making x-grid [10000,20000,...]
+    plt.axes().xaxis.set_major_locator(MultipleLocator(10000))
+    plt.axes().xaxis.set_minor_locator(MultipleLocator(5000))
+
     plt.grid(True, color=(0.9, 0.9, 0.9))
+    plt.grid(True, which='minor', color=(0.9, 0.9, 0.9))
 
 
 def plot(name, stats):
@@ -52,14 +63,16 @@ def plot(name, stats):
 
     setup_mpl()
 
-    plt.plot(x, y_random, label='Embaralhado')
+    plt.plot(x, y_random, label='Embaralhado', color='#279427')
     if y_asc:
-        plt.plot(x, y_asc, label='Crescente')
+        # plt.plot(x, y_asc, label='Crescente', linewidth=3)
+        plt.plot(x, y_asc, label='Crescente', color='#1C6CAA')
 
     if y_desc:
-        plt.plot(x, y_desc, label='Decrescente')
+        plt.plot(x, y_desc, label='Decrescente', color='#FF7311')
 
     post_plotting_design()
+
     fig = plt.gcf()
 
     filename = generate_filename(name)
