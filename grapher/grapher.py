@@ -36,6 +36,7 @@ def post_plotting_design():
         legobj.set_linewidth(2.0)
 
     # Forcing matplotlib to start the axes at (0,0)
+    # plt.ylim(ymin=0, ymax=100)
     plt.ylim(ymin=0)
     plt.xlim(xmin=0)
 
@@ -45,6 +46,8 @@ def post_plotting_design():
     # Making x-grid [10000,20000,...]
     plt.axes().xaxis.set_major_locator(MultipleLocator(10000))
     plt.axes().xaxis.set_minor_locator(MultipleLocator(5000))
+
+    plt.axes().yaxis.set_major_locator(MultipleLocator(20))
 
     plt.grid(True, color=(0.9, 0.9, 0.9))
     plt.grid(True, which='minor', color=(0.9, 0.9, 0.9))
@@ -65,8 +68,8 @@ def plot(name, stats):
 
     plt.plot(x, y_random, label='Embaralhado', color='#279427')
     if y_asc:
-        plt.plot(x, y_asc, label='Crescente', linewidth=3, color='#1C6CAA')
-        # plt.plot(x, y_asc, label='Crescente', color='#1C6CAA')
+        # plt.plot(x, y_asc, label='Crescente', linewidth=3, color='#1C6CAA')
+        plt.plot(x, y_asc, label='Crescente', color='#1C6CAA')
 
     if y_desc:
         plt.plot(x, y_desc, label='Decrescente', color='#FF7311')
