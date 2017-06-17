@@ -116,6 +116,7 @@ if __name__ == '__main__':
         import numpy as np
         from collections import OrderedDict
 
+        # creates entries to be used when plotting the summary graphs
         def make_entry(algorithm, leg_name, color=None):
             return {
                 algorithm: {
@@ -124,15 +125,29 @@ if __name__ == '__main__':
                 }
             }
 
-        colors = matplotlib.cm.rainbow(np.linspace(0, 1, len(quadratic) + len(log_linear)))
+        # plots individual graphs
+        for algorithm, statistics in execution_statistics.items():
+            print(algorithm)
+            grapher.plot(algorithm, statistics)
 
-        tt = ['#00aedb', '#d41243', '#8ec127', '#f47835', '#00d5e0','#FF0000','#0000FF','#306db7','#fea90c', '#77547c', '#9e9a8a']
+        # plots quick_sort vs iterative_quick_sort
+        quick = execution_statistics['quick']
+        iquick = execution_statistics['iquick']
+
+        grapher.plot_a_vs_b(quick, iquick)
+
+        # now plots all vs all
+        tt = ['#00aedb', '#a32294', '#8ec127', '#f47835', '#00d5e0', '#FF0000', '#0000FF', '#306db7', '#ff5d00',
+              '#77547c', '#9e9a8a']
+
+        del log_linear['quick']
+        del log_linear['quick_median']
 
         # r'$...$ creates a LaTeX string (spaces should be created with \:)
         output_mapping = OrderedDict()
 
         output_mapping.update(make_entry('bubble', 'Bubble sort', tt[0]))
-        output_mapping.update(make_entry('bubble_improved', r'$Bubble\:sort^{3}$', tt[1]))
+        output_mapping.update(make_entry('bubble_improved', r'$Bubble\:sort^{2}$', tt[1]))
         output_mapping.update(make_entry('insertion', 'Insertion sort', tt[2]))
         output_mapping.update(make_entry('selection', 'Selection sort', tt[3]))
 
@@ -140,22 +155,13 @@ if __name__ == '__main__':
         output_mapping.update(make_entry('heap', 'Heap sort', tt[5]))
         output_mapping.update(make_entry('shell', 'Shell sort', tt[6]))
 
-        output_mapping.update(make_entry('quick', 'Quick sort', tt[7]))
+        # output_mapping.update(make_entry('quick', 'Quick sort', tt[7]))
         output_mapping.update(make_entry('iquick', r'$Quick\:sort^{1}$', tt[8]))
-        output_mapping.update(make_entry('iquick_median', r'$Quick\:sort^{1,2}$', tt[9]))
-        output_mapping.update(make_entry('quick_median', r'$Quick\:sort^{2}$', tt[10]))
+        output_mapping.update(make_entry('iquick_median', r'$Quick\:sort^{1}$', tt[9]))
+        # output_mapping.update(make_entry('quick_median', r'$Quick\:sort^{2}$', tt[10]))
 
         grapher.plot_many_vs_many(quadratic, 'quadratics', output_mapping)
         grapher.plot_many_vs_many(log_linear, 'log_linear', output_mapping)
 
         log_linear.update(quadratic)
         grapher.plot_many_vs_many(log_linear, 'all', output_mapping, True)
-
-        for algorithm, statistics in execution_statistics.items():
-            print(algorithm)
-            grapher.plot(algorithm, statistics)
-
-        quick = execution_statistics['quick']
-        iquick = execution_statistics['iquick']
-
-        grapher.plot_a_vs_b(quick, iquick)
