@@ -17,9 +17,9 @@ def generate_filename(algorithm_name):
     return osp.join(graphs_dir, algorithm_name)
 
 
-def setup_mpl():
+def setup_mpl(font_size=15):
     """Setup of font and draw area sizes."""
-    mpl.rcParams['font.size'] = 15
+    mpl.rcParams['font.size'] = font_size
     mpl.rcParams['axes.labelsize'] = 15
     mpl.rcParams['axes.labelpad'] = 10
 
@@ -29,14 +29,15 @@ def setup_mpl():
 def post_plotting_design():
     """Adds legends, pads axes label, soften grid color."""
 
-    leg = plt.legend(fancybox=True, title=r'$\bf{Array}$')
+    leg = plt.legend(fancybox=True, title=r'$\bf{Algoritmo}$')
 
     # set the linewidth of each legend object
     for legobj in leg.legendHandles:
         legobj.set_linewidth(2.0)
 
     # Forcing matplotlib to start the axes at (0,0)
-    # plt.ylim(ymin=0, ymax=100)
+    plt.ylim(ymin=0)
+    #plt.ylim(ymin=0, ymax=209)
     plt.ylim(ymin=0)
     plt.xlim(xmin=0)
 
@@ -44,13 +45,19 @@ def post_plotting_design():
     plt.ylabel('Tempo (s)')
 
     # Making x-grid [10000,20000,...]
-    plt.axes().xaxis.set_major_locator(MultipleLocator(10000))
-    plt.axes().xaxis.set_minor_locator(MultipleLocator(5000))
+    # plt.axes().xaxis.set_major_locator(MultipleLocator(10000))
+    # plt.axes().xaxis.set_minor_locator(MultipleLocator(5000))
 
-    plt.axes().yaxis.set_major_locator(MultipleLocator(20))
+    # plt.axes().yaxis.set_major_locator(MultipleLocator(20))
 
     plt.grid(True, color=(0.9, 0.9, 0.9))
     plt.grid(True, which='minor', color=(0.9, 0.9, 0.9))
+
+
+def save_plot(gcf, name):
+    filename = generate_filename(name)
+    gcf.savefig('{}.eps'.format(filename), format='eps', dpi=1000)
+    gcf.savefig('{}.png'.format(filename), format='png')
 
 
 def plot(name, stats):
@@ -59,6 +66,11 @@ def plot(name, stats):
     # by the project design, all executions are under the same dataset, so fetching from a single one should be fine.
     x = stats['r']['size']
 
+    if stats.get('a', None):
+        lenx = len(stats['a']['size'])
+    else:
+        lenx = len(x)
+
     # getting the execution times.
     y_random = stats['r']['average_time'] if 'r' in stats else []
     y_asc = stats['a']['average_time'] if 'a' in stats else []
@@ -66,19 +78,62 @@ def plot(name, stats):
 
     setup_mpl()
 
-    plt.plot(x, y_random, label='Embaralhado', color='#279427')
+    plt.plot(x[:lenx], y_random[:lenx], label='Embaralhado', color='#279427')
     if y_asc:
         # plt.plot(x, y_asc, label='Crescente', linewidth=3, color='#1C6CAA')
-        plt.plot(x, y_asc, label='Crescente', color='#1C6CAA')
+        plt.plot(x[:lenx], y_asc[:lenx], label='Crescente', color='#1C6CAA')
 
     if y_desc:
-        plt.plot(x, y_desc, label='Decrescente', color='#FF7311')
+        plt.plot(x[:lenx], y_desc[:lenx], label='Decrescente', color='#FF7311')
+
+    post_plotting_design()
+
+    gcf = plt.gcf()
+    save_plot(gcf, name)
+
+    gcf.clear()
+
+
+def plot_many_vs_many(algorithms, filename, mapping={}, dashed_lines=False):
+
+    def get_presenting_details(mapping, algorithm):
+        entry = mapping.get(algorithm, {})
+
+        # None color means random color
+        return entry.get('name', algorithm), entry.get('color', None)
+
+
+    setup_mpl(font_size=12)
+    for algorithm, statistics in algorithms.items():
+        name, color = get_presenting_details(mapping, algorithm)
+        if dashed_lines:
+            plt.plot(statistics['size'], statistics['average_time'], label=name, color=color, dashes=[2,2])
+        else:
+            plt.plot(statistics['size'], statistics['average_time'], label=name, color=color)
+
+    post_plotting_design()
+
+    gcf = plt.gcf()
+    save_plot(gcf, filename)
+
+    gcf.clear()
+
+
+def plot_a_vs_b(quick, iquick):
+    x = quick['r']['size']
+
+    y1 = quick['r']['average_time']
+    y2 = iquick['r']['average_time']
+
+    setup_mpl()
+    plt.plot(x, y1, label='Recursivo', color='#af3190')
+    plt.plot(x, y2, label='Iterativo', color='#31afa8')
 
     post_plotting_design()
 
     fig = plt.gcf()
 
-    filename = generate_filename(name)
+    filename = generate_filename('quick_iquick')
     fig.savefig('{}.eps'.format(filename), format='eps', dpi=1000)
     fig.savefig('{}.png'.format(filename), format='png')
     fig.clear()
