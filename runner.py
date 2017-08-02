@@ -77,7 +77,7 @@ if __name__ == '__main__':
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('-a', help='The sorting algorithm to be used: bubble, bubble_improved, heap, insertion, ' +
-                        'merge, quick, quick_median, selection, iquick, iquick_median.', required=True,
+                        'merge, quick, quick_median, selection, iquick, iquick_median, shell.', required=True,
                         dest='algorithm', default=argparse.SUPPRESS)
     parser.add_argument('--mode', help='How the generated numbers will be distributed: (a)scending, (d)escending,' +
                                    '(r)andom.', default='r', type=str)
